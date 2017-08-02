@@ -25,7 +25,8 @@ export default class Board extends Component{
   render(){
     const style={
       width: '100vw',
-      height: '100vh'
+      height: '100vh',
+    
     }
 
     return(

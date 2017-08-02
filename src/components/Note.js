@@ -12,28 +12,33 @@ export default class Note extends Component{
   }
 
   handleChange=(e)=>{
-    this.setState={
+    this.setState({
       value:e.target.value
-    }
+    })
   }
 
 
   render(){
     const yPos= this.props.y
     const xPos=this.props.x
-    const style={
-      width: '100px',
-      height:'75px',
-      backgroundColor: 'tomato',
+    const styleContainer={
+      width: '200px',
+      height:'150px',
       position: 'absolute',
       top:yPos,
       left: xPos,
     }
+    const styleText={
+      width: '100%',
+      height: '100%',
+      backgroundColor:"#ccff00"
+    }
     return(
-      <div style={style}>
+      <div style={styleContainer}>
         <textarea
           value={this.state.value}
           onChange={this.handleChange}
+          style={styleText}
           className="note"/>
       </div>
     )
