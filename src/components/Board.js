@@ -13,12 +13,15 @@ export default class Board extends Component{
     this.handleClick=this.handleClick.bind(this)
   }
 
+
+
+
   handleClick=(e)=>{
     const xpos= String(e.clientX)+"px"
     const ypos=String(e.clientY)+'px'
     console.log("creating new note")
     this.setState({
-      notes: [...this.state.notes, <Note x={xpos} y={ypos} />]
+      notes: [...this.state.notes, <Note xPos={xpos} yPos={ypos} xCoor={e.clientX} yCoor={e.clientY} key={this.state.notes.length}  />]
     })
   }
 
@@ -26,11 +29,11 @@ export default class Board extends Component{
     const style={
       width: '100vw',
       height: '100vh',
-    
+
     }
 
     return(
-      <div onClick={this.handleClick} style={style}>
+      <div onDoubleClick={this.handleClick} style={style}>
           {this.state.notes}
       </div>
     )
