@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
+//my components
 import Note from './Note'
 
-//props of onHandleClick which takes 2 parameters: ClientX and ClientY
+
+
 
 export default class Board extends Component{
 
@@ -17,13 +19,15 @@ export default class Board extends Component{
 
 
   handleClick=(e)=>{
-    const xpos= String(e.clientX)+"px"
-    const ypos=String(e.clientY)+'px'
+    const xpos= String(e.clientX)
+    const ypos=String(e.clientY)
     console.log("creating new note")
     this.setState({
-      notes: [...this.state.notes, <Note xPos={xpos} yPos={ypos} xCoor={e.clientX} yCoor={e.clientY} key={this.state.notes.length}  />]
+      notes: [...this.state.notes, <Note initialPos={{x: xpos, y:ypos}} key={this.state.notes.length}  />]
     })
   }
+
+
 
   render(){
     const style={
@@ -34,7 +38,9 @@ export default class Board extends Component{
 
     return(
       <div onDoubleClick={this.handleClick} style={style}>
+
           {this.state.notes}
+
       </div>
     )
   }

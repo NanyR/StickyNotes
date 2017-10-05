@@ -1,4 +1,6 @@
+
 import React, {Component} from 'react'
+
 
 //props coordinates where component goes
 
@@ -8,14 +10,14 @@ export default class Note extends Component{
     this.state={
       value:'',
       dragging:false,
-      x:this.props.xPos,
-      y:this.props.yPos,
-      diffX:null,
-      diffY:null
+      pos: this.props.initialPos,
+      posRel:null
     }
     this.handleChange=this.handleChange.bind(this)
-    this.handleDrag=this.handleDrag.bind(this)
-    this.handleClick=this.handleClick.bind(this)
+    this.handleMouseDown=this.handleMouseDown.bind(this)
+    this.handleMouseUp=this.handleMouseUp.bind(this)
+    this.handleMouseMove=this.handleMouseMove.bind(this)
+    
   }
 
   handleChange=(e)=>{
@@ -25,36 +27,54 @@ export default class Note extends Component{
   }
 
 
-  onDragStart=(e)=>{
+  handleMouseDown=(e)=>{
+    if(e.button!=0){
+      return
+    }
+    console.log("button down");
+    var relX= e.nativeEvent.offsetX;
+    var relY=e.nativeEvent.offsetY;
     this.setState({
-      diffX:e.clientX-this.props.xCoor,
-      diffY:e.clientY- this.props.yCoor
+      posRel:{
+        x: relX,
+        y: relY
+      },
+      dragging:true
+    })
+}
+
+
+
+
+
+
+
+handleMouseMove=(e)=>{
+  if(this.state.dragging){
+    console.log("we're moving"+ this.state.posRel.x)
+    this.setState({
+      pos:{
+        x: e.pageX-this.state.posRel.x,
+        y: e.pageY-this.state.posRel.y
+      }
     })
   }
+}
 
-  handleDrag=(e)=>{
-
-  }
-
-  handleDragEnd=(e)=>{
-    const newX=e.clientX- this.state.diffX
-    const newY= e.clientY-this.state.diffY
-    this.setState({
-      x:newX,
-      y:newY,
-      dragging:false
-    })
-  }
-
-  handleClick=(e)=>{
-    console.log(e.clientX, e.clientY)
-  }
-
+handleMouseUp=(e)=>{
+  console.log("Mouse up");
+  console.log("Position on note: "+ this.state.posRel.x + " "+ this.state.posRel.y);
+  this.setState({
+    dragging:false
+  })
+    e.preventDefault()
+    e.stopPropagation()
+}
 
 
   render(){
-    const yPos= this.state.y
-    const xPos=this.state.x
+    const yPos= this.state.pos.y+"px"
+    const xPos=this.state.pos.x+'px'
     const styleContainer={
       width: '200px',
       height:'150px',
@@ -68,7 +88,11 @@ export default class Note extends Component{
       backgroundColor:"#ccff00"
     }
     return(
-      <div style={styleContainer} onClick={this.handleClick} onDrag={this.handleDrag} draggable="true" onDragEnd={this.handleDragEnd}>
+      <div style={styleContainer}
+      onClick={this.handleClick}
+      onMouseDown={this.handleMouseDown}
+      onMouseMove={this.handleMouseMove}
+      onMouseUp={this.handleMouseUp}>
         <textarea
           value={this.state.value}
           onChange={this.handleChange}
